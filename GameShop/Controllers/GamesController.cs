@@ -1,4 +1,5 @@
 ﻿using GameShop.interfaces;
+using GameShop.Models;
 using GameShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,14 +20,40 @@ namespace GameShop.Controllers
             _allCategories = iGamesCat;
         }
 
-        public ViewResult List()
+        [Route("Games/List")]
+        [Route("Games/List/{category}")]
+        public ViewResult List(string category)
         {
-            ViewBag.Title = "Страница с играми";
-            GamesListViewModel obj = new GamesListViewModel();
-            obj.allGames = _allGames.Games;
-            obj.currCategory = "Игры";
+            string _category = category;
+            IEnumerable<Game> games = null;
+            string currCategory = "";
+            if (string.IsNullOrEmpty(category))
+            {
+                games = _allGames.Games.OrderBy(i => i.id);
+            }
+            else
+            {
+                if (string.Equals("shooter", category, StringComparison.OrdinalIgnoreCase))
+                {
+                    games = _allGames.Games.Where(i => i.Category.categoryName.Equals("Шутеры")).OrderBy(i => i.id);
+                    currCategory = "Шутеры";
+                }
+                else if (string.Equals("race", category, StringComparison.OrdinalIgnoreCase))
+                {
+                    games = _allGames.Games.Where(i => i.Category.categoryName.Equals("Гонки")).OrderBy(i => i.id);
+                    currCategory = "Гонки";
+                }
+            }
+            var gameObj = new GamesListViewModel
+                {
+                    allGames = games,
+                    currCategory = currCategory
+                };
 
-            return View(obj);
+
+            ViewBag.Title = "Страница с играми";
+            
+            return View(gameObj);
         }
     }
 }
