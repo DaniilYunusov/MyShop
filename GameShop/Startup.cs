@@ -41,6 +41,7 @@ namespace GameShop
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddTransient<IAllGames, GameRepository>();
             services.AddTransient<IGamesCategory, CategoryRepository>();
+            services.AddTransient<IAllOrders, OrdersRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => ShopCart.GetCart(sp));
