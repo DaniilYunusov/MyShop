@@ -9,7 +9,7 @@ namespace GameShop.interfaces
     public interface IAllGames
     {
         IEnumerable<Game> Games { get; }
-        IEnumerable<Game> getFavGames { get; set; }
+        IEnumerable<Game> getFavGames { get;}
         Game getObjectGame(int gameid);
     }
 }
