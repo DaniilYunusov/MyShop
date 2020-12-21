@@ -6,32 +6,27 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using GameShop.Models;
+using GameShop.interfaces;
+using GameShop.ViewModels;
 
 namespace GameShop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IAllGames _gameRep;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IAllGames gameRep)
         {
-            _logger = logger;
+            _gameRep = gameRep;
         }
 
-        public IActionResult Index()
+        public ViewResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var homeGames = new HomeViewModel
+            {
+                favGames = _gameRep.getFavGames
+            };
+            return View(homeGames);
         }
     }
 }
